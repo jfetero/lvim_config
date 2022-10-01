@@ -12,8 +12,7 @@ an executable
 vim.opt.relativenumber = true
 lvim.log.level = "warn"
 lvim.format_on_save = true
-lvim.colorscheme = "nightfly"
-lvim.builtin.lualine.options.theme = "nightfly"
+lvim.colorscheme = "nightfox"
 -- to disable icons and use a minimalist setup, uncomment the following
 -- lvim.use_icons = false
 
@@ -23,7 +22,6 @@ lvim.leader = "space"
 lvim.keys.normal_mode["<C-s>"] = ":w<cr>"
 lvim.keys.normal_mode["<S-l>"] = ":BufferLineCycleNext<CR>"
 lvim.keys.normal_mode["<S-h>"] = ":BufferLineCyclePrev<CR>"
-
 -- My defaults
 lvim.keys.normal_mode["Y"] = "y$"
 lvim.keys.normal_mode["n"] = "nzzzv"
@@ -32,8 +30,9 @@ lvim.keys.normal_mode["J"] = "mxJ'z"
 lvim.keys.normal_mode["x"] = '"_x'
 lvim.keys.normal_mode["+"] = "<C-a>"
 lvim.keys.normal_mode["-"] = "<C-x>"
+lvim.keys.normal_mode["<a-d>"] = '"_d'
 
-lvim.keys.visual_mode["<leader>d"] = '"_d'
+lvim.keys.visual_mode["<a-d>"] = '"_d'
 lvim.keys.visual_mode["<leader>y"] = '"+y'
 lvim.keys.insert_mode[","] = ",<c-g>u"
 lvim.keys.insert_mode["."] = ".<c-g>u"
@@ -45,15 +44,11 @@ lvim.keys.insert_mode["\\"] = "\\<c-g>u"
 lvim.keys.term_mode["<c-q>"] = "<c-\\><c-n>"
 lvim.keys.term_mode["<esc><esc>"] = "<c-\\><c-n>:q<cr>"
 
-lvim.builtin.which_key.mappings["t"] = {
-	name = "Terminal",
-	t = { ":ToggleTerm size=50 direction=float<CR>", "Terminal Float" },
+lvim.builtin.which_key.mappings["F"] = {
+	name = "+Terminal",
+	f = { ":ToggleTerm size=50 direction=float<CR>", "Terminal Float" },
 	h = { ":ToggleTerm size=15 direction=horizontal<CR>", "Terminal Horizontal" },
 	v = { ":ToggleTerm size=80 direction=vertical<CR>", "Terminal Vertical" },
-}
-lvim.builtin.which_key.mappings["d"] = {
-	'"_d',
-	"Deletes without yanking",
 }
 lvim.builtin.which_key.mappings["c"] = {
 	"<cmd>BufferKill<CR>",
@@ -62,9 +57,12 @@ lvim.builtin.which_key.mappings["c"] = {
 lvim.builtin.nvimtree.setup.view.mappings.list = {
 	{ key = "V", action = "split" },
 }
+
 -- unmap a default keymapping
 -- vim.keymap.del("n", "<C-Up>")
 -- override a default keymapping
+-- lvim.keys.normal_mode["<C-q>"] = ":q<cr>" -- or vim.keymap.set("n", "<C-q>", ":q<cr>" )
+
 -- Change Telescope navigation to use j and k for navigation and n and p for history in both input and normal mode.
 -- we use protected-mode (pcall) just in case the plugin wasn't loaded yet.
 local _, actions = pcall(require, "telescope.actions")
@@ -84,21 +82,22 @@ lvim.builtin.telescope.defaults.mappings = {
 }
 
 -- Use which-key to add extra bindings with the leader-key prefix
--- lvim.builtin.which_key.mappings["P"] = { "<cmd>Telescope projects<CR>", "Projects" }
--- lvim.builtin.which_key.mappings["t"] = {
--- 	name = "Diagnostics",
--- 	t = { "<cmd>TroubleToggle<cr>", "trouble" },
--- 	w = { "<cmd>TroubleToggle workspace_diagnostics<cr>", "workspace" },
--- 	d = { "<cmd>TroubleToggle document_diagnostics<cr>", "document" },
--- 	q = { "<cmd>TroubleToggle quickfix<cr>", "quickfix" },
--- 	l = { "<cmd>TroubleToggle loclist<cr>", "loclist" },
--- 	r = { "<cmd>TroubleToggle lsp_references<cr>", "references" },
--- }
+lvim.builtin.which_key.mappings["P"] = { "<cmd>Telescope projects<CR>", "Projects" }
+lvim.builtin.which_key.mappings["t"] = {
+	name = "+Trouble",
+	r = { "<cmd>Trouble lsp_references<cr>", "References" },
+	f = { "<cmd>Trouble lsp_definitions<cr>", "Definitions" },
+	d = { "<cmd>Trouble document_diagnostics<cr>", "Diagnostics" },
+	q = { "<cmd>Trouble quickfix<cr>", "QuickFix" },
+	l = { "<cmd>Trouble loclist<cr>", "LocationList" },
+	w = { "<cmd>Trouble workspace_diagnostics<cr>", "Workspace Diagnostics" },
+}
 
 -- TODO: User Config for predefined plugins
 -- After changing plugin config exit and reopen LunarVim, Run :PackerInstall :PackerCompile
-lvim.builtin.alpha.active = false
+lvim.builtin.alpha.active = true
 lvim.builtin.alpha.mode = "dashboard"
+lvim.builtin.dap.active = true
 lvim.builtin.notify.active = true
 lvim.builtin.terminal.active = true
 lvim.builtin.nvimtree.setup.view.side = "left"
@@ -171,17 +170,16 @@ formatters.setup({
 	{ command = "black", filetypes = { "python" } },
 	{ command = "rubocop", filetypes = { "ruby" } },
 	{ command = "stylua", filetypes = { "lua" } },
-	--   { command = "isort", filetypes = { "python" } },
-	--   {
-	-- each formatter accepts a list of options identical to https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/BUILTINS.md#Configuration
-	command = "prettier",
-	---@usage arguments to pass to the formatter
-	-- these cannot contain whitespaces, options such as `--line-width 80` become either `{'--line-width', '80'}` or `{'--line-width=80'}`
-	extra_args = { "--print-with", "100" },
-	---@usage specify which filetypes to enable. By default a providers will attach to all the filetypes it supports.
-	filetypes = { "typescript", "typescriptreact" },
+	{
+		-- each formatter accepts a list of options identical to https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/BUILTINS.md#Configuration
+		command = "prettier",
+		---@usage arguments to pass to the formatter
+		-- these cannot contain whitespaces, options such as `--line-width 80` become either `{'--line-width', '80'}` or `{'--line-width=80'}`
+		extra_args = { "--print-with", "100" },
+		---@usage specify which filetypes to enable. By default a providers will attach to all the filetypes it supports.
+		filetypes = { "typescript", "typescriptreact" },
+	},
 })
--- },
 
 -- -- set additional linters
 -- local linters = require "lvim.lsp.null-ls.linters"
@@ -203,14 +201,14 @@ formatters.setup({
 
 -- Additional Plugins
 lvim.plugins = {
-	{ "folke/tokyonight.nvim" },
 	{ "glepnir/zephyr-nvim" },
 	{ "rmehri01/onenord.nvim" },
 	{ "bluz71/vim-nightfly-guicolors" },
-	-- {
-	-- 	"folke/trouble.nvim",
-	-- 	cmd = "TroubleToggle",
-	-- },
+	{ "EdenEast/nightfox.nvim" },
+	{
+		"folke/trouble.nvim",
+		cmd = "TroubleToggle",
+	},
 }
 
 -- Autocommands (https://neovim.io/doc/user/autocmd.html)
