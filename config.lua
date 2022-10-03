@@ -30,9 +30,14 @@ lvim.keys.normal_mode["J"] = "mxJ'z"
 lvim.keys.normal_mode["x"] = '"_x'
 lvim.keys.normal_mode["+"] = "<C-a>"
 lvim.keys.normal_mode["-"] = "<C-x>"
-lvim.keys.normal_mode["<a-d>"] = '"_d'
+lvim.keys.normal_mode["<M-d>"] = '"_d'
+lvim.builtin.terminal.execs = {
+	{ vim.o.shell, "<M-1>", "Vertical Terminal", "vertical", 80 },
+	{ vim.o.shell, "<M-2>", "Horizontal Terminal", "horizontal", 15 },
+	{ vim.o.shell, "<M-3>", "Float Terminal", "float", nil },
+}
 
-lvim.keys.visual_mode["<a-d>"] = '"_d'
+lvim.keys.visual_mode["<M-d>"] = '"_d'
 lvim.keys.visual_mode["<leader>y"] = '"+y'
 lvim.keys.insert_mode[","] = ",<c-g>u"
 lvim.keys.insert_mode["."] = ".<c-g>u"
@@ -44,12 +49,6 @@ lvim.keys.insert_mode["\\"] = "\\<c-g>u"
 lvim.keys.term_mode["<c-q>"] = "<c-\\><c-n>"
 lvim.keys.term_mode["<esc><esc>"] = "<c-\\><c-n>:q<cr>"
 
-lvim.builtin.which_key.mappings["F"] = {
-	name = "+Terminal",
-	f = { ":ToggleTerm size=50 direction=float<CR>", "Terminal Float" },
-	h = { ":ToggleTerm size=15 direction=horizontal<CR>", "Terminal Horizontal" },
-	v = { ":ToggleTerm size=80 direction=vertical<CR>", "Terminal Vertical" },
-}
 lvim.builtin.which_key.mappings["c"] = {
 	"<cmd>BufferKill<CR>",
 	"Close buffer",
