@@ -9,10 +9,11 @@ an executable
 -- THESE ARE EXAMPLE CONFIGS FEEL FREE TO CHANGE TO WHATEVER YOU WANT
 
 -- general
+vim.g.bracey_browser_command = "wslview"
 vim.opt.relativenumber = true
 lvim.log.level = "warn"
 lvim.format_on_save = true
-lvim.colorscheme = "nightfox"
+lvim.colorscheme = "onenord"
 -- to disable icons and use a minimalist setup, uncomment the following
 -- lvim.use_icons = false
 
@@ -56,6 +57,7 @@ lvim.builtin.which_key.mappings["c"] = {
 }
 lvim.builtin.nvimtree.setup.view.mappings.list = {
 	{ key = "V", action = "split" },
+	{ key = "v", action = "vsplit" },
 }
 
 -- unmap a default keymapping
@@ -214,6 +216,11 @@ lvim.plugins = {
 	{
 		"folke/trouble.nvim",
 		cmd = "TroubleToggle",
+	},
+	{
+		"turbio/bracey.vim",
+		cmd = { "Bracey", "BracyStop", "BraceyReload", "BraceyEval" },
+		run = "npm install --prefix server",
 	},
 }
 
